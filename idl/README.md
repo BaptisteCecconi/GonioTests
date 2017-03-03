@@ -40,7 +40,7 @@ parameters and direction of arrival using `DFb`inversion (*level 3b data*).
 
 The data are stored in a custom fixed-length record binary format. 
  
-### Setting an set of antenna for your simulation
+### Setting a set of antenna for your simulation
 
 The antenna files are binary files containing 
 a series of four records composed of three 32 bit floating point values (little 
@@ -54,6 +54,8 @@ containing antenna parameters.
 
 ```idl
 IDL> ant = {antenna_set}
+% Compiled module: ANTENNA_SET__DEFINE.
+% Compiled module: ANTENNA__DEFINE.
 IDL> ant.xp.h = 1.0
 IDL> ant.xp.al = 90.0
 IDL> ant.xp.be = 45.0
@@ -66,7 +68,14 @@ IDL> ant.z.be = 0.0
 IDL> ant.dip.h = 1.0
 IDL> ant.dip.al = 90.0
 IDL> ant.dip.be = 90.0
-IDL> write_antenna_set,file='test_antenna',ant_set=ant,path='data/temp/'
+IDL> write_antenna_set,file='test_antenna',ant_set=ant,path='data/temp'
+% Compiled module: WRITE_ANTENNA_SET.
+% WRITE_ANTENNA_SET: You entered the followind parameters : 
+% WRITE_ANTENNA_SET: X+ antenna : h=1.00 al= 90.0 be= 45.0
+% WRITE_ANTENNA_SET: X- antenna : h=1.00 al= 90.0 be=-45.0
+% WRITE_ANTENNA_SET: Z  antenna : h=1.00 al=  0.0 be=  0.0
+% WRITE_ANTENNA_SET: Dipole     : h=1.00 al= 90.0 be= 90.0
+% WRITE_ANTENNA_SET: Antenna set parameters writen in data/temp/test_antenna.ant
 ```
 This sequence of instructions will create an antenna file with the desired 
 parameters at `data/temp/test_antennna.ant`.
@@ -76,4 +85,51 @@ parameters manually.
 
 ### Simulating goniopolarimetric data 
 
-The main routine is `dfb_test_run`.
+The main routine is `dfb_test_run`. A minimal set of keywords to specify is 
+shown in the example below. The source code of the script gives all details 
+on the various keywords and options.
+
+```idl
+IDL> dfb_test_run,antenna_file='test_antenna',file_ext='test_result',output_path='data/'
+% Compiled module: DFB_TEST_RUN.
+% Compiled module: QUATERNION.
+The quaternion.pro procedure set has been successfully compiled and loaded ! 
+ (c) BC, Jun 11 2002
+Polar :          208 -- Angles :         2522 -- Flux :            2
+ -> Total :      1049152
+% Compiled module: READ_ANTENNA_SET.
+% Compiled module: ANTENNA_SET__DEFINE.
+% Compiled module: ANTENNA__DEFINE.
+% READ_ANTENNA_SET: Reading Antenna Parameters from : data/temp//test_antenna.ant
+% READ_ANTENNA_SET:  Converting angles into radian ...
+% READ_ANTENNA_SET: Antenna Parameters loaded.
+% Compiled module: DATA_N2__DEFINE.
+% Compiled module: DATA_N3B__DEFINE.
+% Compiled module: DATA_EPHEM__DEFINE.
+% Compiled module: V1V2_XTND.
+% Compiled module: V1IV2_XTND.
+% Compiled module: WRITE_DATA_BINARY.
+% Compiled module: WRITE_ANTENNA_SET.
+% WRITE_ANTENNA_SET: You entered the followind parameters : 
+% WRITE_ANTENNA_SET: X+ antenna : h=1.00 al= 90.0 be= 45.0
+% WRITE_ANTENNA_SET: X- antenna : h=1.00 al= 90.0 be=-45.0
+% WRITE_ANTENNA_SET: Z  antenna : h=1.00 al=  0.0 be=  0.0
+% WRITE_ANTENNA_SET: Dipole     : h=1.00 al= 90.0 be= 90.0
+% WRITE_ANTENNA_SET: Antenna set parameters writen in data/temp/dfb_test_test_result.ant
+% Compiled module: DFB_MAIN.
+% READ_ANTENNA_SET: Reading Antenna Parameters from : data/temp//test_antenna.ant
+% READ_ANTENNA_SET:  Converting angles into radian ...
+% READ_ANTENNA_SET: Antenna Parameters loaded.
+% Compiled module: MAKE_VECT_SPH.
+% Compiled module: CROSSP1.
+% Compiled module: ANGULAR_DISTANCE.
+% Program caused arithmetic error: Floating illegal operand
+IDL> 
+```
+The script used the antenna file prepared in the previous section, and wrote 
+the following files:
+
+* `data/n2/Pdfb_test_test_result.00` containing the *level 2* modeled measurements
+* `data/n3b/N3b_Ixx_test_test_result.00` containing the input wave characteristics
+* `data/n3b/N3b_Oxx_test_test_result.00` containing the reconstructed wave characteristics
+* `data/ephem/dfb_test_test_result.ephem` containing the input radio source location
