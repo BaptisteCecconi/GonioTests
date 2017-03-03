@@ -209,7 +209,7 @@ endif
 ; loading input antenna parameters 
 
 ;if keyword_set(antenna_file) then begin
-  read_antenna_set,ant,antenna_file,/rad
+  read_antenna_set,ant,antenna_file,/rad,path=output_path+'temp/'
 ;endif else begin
 ;  antenna_file='dfb_test'
 ;  read_antenna_set,ant,'dfb_test',/rad
@@ -460,7 +460,7 @@ write_antenna_set,file='dfb_test_'+file_ext,ant_set=ant,/rad,path=path+'temp'
 ; ====================  Call dfb_main   ==============================
 ; ====================================================================
 
-dfb_main,df,datap,datam,angle,antenna_file,df.sn
+dfb_main,df,datap,datam,angle,antenna_file,df.sn,path=output_path
 write_data_binary,path+'n3b/N3b_Oxx_test_'+file_ext+'.00',df
 
 

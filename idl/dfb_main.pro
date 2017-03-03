@@ -1,6 +1,6 @@
 ; ====================================================================
 PRO dfb_main,df_result,data_p,data_m,ephem,antenna_file,sn, $
-             VERBOSE=VERBOSE,TEST=TEST
+             VERBOSE=VERBOSE,TEST=TEST,path=path
 ; ====================================================================
 ; all angles are in radian
 ; ====================================================================
@@ -9,10 +9,10 @@ PRO dfb_main,df_result,data_p,data_m,ephem,antenna_file,sn, $
 ; --------------------------------------------------------------------
 
 if antenna_file eq 'calDec04' then begin 
-  read_antenna_set,antenna_HF,'calDec04_H12',/rad
-  read_antenna_set,antenna_LF,'calDec04_ABC',/rad
+  read_antenna_set,antenna_HF,'calDec04_H12',/rad,path=path+'temp/'
+  read_antenna_set,antenna_LF,'calDec04_ABC',/rad,path=path+'temp/'
 endif else begin
-  read_antenna_set,antenna_HF,antenna_file,/rad
+  read_antenna_set,antenna_HF,antenna_file,/rad,path=path+'temp/'
   antenna_LF = antenna_HF
 endelse
 
@@ -187,8 +187,8 @@ Sm = (data_m.autoX*sz^2. - 2.*data_m.crossR*sxm*sz + $
 ;Vm = -2.*data_m.crossI/(Sm*sz*sym)
 ;
 ; ===== NB =====
-; le signe moins vient du fait qu'on calcul th,ph en tant que direction 
-; de la source et non direction de k
+; the minus sign is here because we compute (th, ph) as the direction of the  
+; source and not the direction of propagation
 ; ==============
 ;
 ; => V is now computed in the Wave frame
