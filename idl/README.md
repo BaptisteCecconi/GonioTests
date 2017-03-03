@@ -25,6 +25,21 @@ and lengths. The following noises and biases are configurable:
 The frequency of observation is not a parameter, as we consider observations in
 the short dipole range where the antenna response is constant over frequencies.
 
+### Data directories
+
+The library is working smoothly if a specific data directory structure is 
+followed. A `data/` directory must be created. This will be the main directory
+for input and output files. It must contain four subdirectories:
+
+* `data/n2/`  contains the simulated goniopolarimetric data, which are auto- 
+and cross-correlations (*level 2 data*).  
+* `data/n3b/` contains the simulated reconstructed data, which are Stokes 
+parameters and direction of arrival using `DFb`inversion (*level 3b data*).  
+* `data/ephem/` contains the input waves direction of propagations.  
+* `data/temp/` contains the test antenna parameter files. 
+
+The data are stored in a custom fixed-length record binary format. 
+ 
 ### Setting an set of antenna for your simulation
 
 The antenna files are binary files containing 
@@ -35,12 +50,29 @@ the provided set of routines. The antenna are named `Xp`, `Xm`, `Z` and `Dip`,
 which are the names of the antenna of the Cassini/RPWS instrument. 
 
 The `write_antenna_set` routine can be used to produce antenna (`.ant`) files 
-containing antenna parameters. When launched with no parameters, the user can 
-enter the various parameters manually:
+containing antenna parameters. 
 
 ```idl
-IDL> write_antenna_set
+IDL> ant = {antenna_set}
+IDL> ant.xp.h = 1.0
+IDL> ant.xp.al = 90.0
+IDL> ant.xp.be = 45.0
+IDL> ant.xm.h = 1.0
+IDL> ant.xm.al = 90.0
+IDL> ant.xm.be = -45.0
+IDL> ant.z.h = 1.0
+IDL> ant.z.al = 0.0
+IDL> ant.z.be = 0.0
+IDL> ant.dip.h = 1.0
+IDL> ant.dip.al = 90.0
+IDL> ant.dip.be = 90.0
+IDL> write_antenna_set,file='test_antenna',ant_set=ant,path='data/temp/'
 ```
+This sequence of instructions will create an antenna file with the desired 
+parameters at `data/temp/test_antennna.ant`.
+
+Note that when launched with no parameters, the user can enter the various 
+parameters manually.
 
 ### Simulating goniopolarimetric data 
 
