@@ -3,7 +3,8 @@
 ## Disclaimer
 
 This code has been tested with [IDL (Interactive Data Language)](http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx), 
-a commercial data processing language. GDL (GNU Data Language) is an opensource version of IDL. This code should work with GDL.
+a commercial data processing language. GDL (GNU Data Language) is an opensource version of IDL. 
+This code should run seamlessly with GDL (but not actually tested yet).
 
 ## Usage
 
